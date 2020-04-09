@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Employee;
 use Illuminate\Http\Request;
-use Validator;
+use Symfony\Component\HttpFoundation\Response;
 
  class EmployeeController extends Controller
 {
@@ -15,34 +15,32 @@ use Validator;
         $this->model = $employee;
     }
 
-    public function getAll()
+    public function showAll()
     {
         $employee = $this->model->all();
 
 
         if (count($employee) == 0)
-            return response()->json(['message' => 'employee list is empty'], 404);
+            return response()->json(['message' => 'employee list is empty'], Response::HTTP_BAD_REQUEST);
         return response()->json($employee);
     }
 
-    public function get($id){
+    public function index($id){
         $employee = $this->model->find($id);
 
         if($employee == null)
-            return response()->json(['message' => 'Falha ao adicionar usuário'], 404);
-        return response()->json($employee,200);
+            return response()->json(['message' => 'failed to add new employee'], 404);
+        return response()->json($employee,Response::HTTP_OK);
     }
 
     public function insert(Request $request){
 
         $this->validate($request, [
             'email' => 'required',
-            'pass' => 'required',
-            'id' => 'required'
+            'pass' => 'required'
         ], [
-            'required' => 'O campo :attribute é obrigatório!'
+            'required' => 'the field :attribute is required!'
         ]);
-
         $employee = new $this->employee;
         $employee->id = $request->input('id');
         $employee->nome = $request->input('name');
@@ -60,7 +58,7 @@ use Validator;
         $employee = $this->models->find($id)
             ->update($request->all());
 
-        return response()->json($employee, 200);
+        return response()->json($employee,Response::HTTP_OK);
 
     }
 
@@ -68,6 +66,6 @@ use Validator;
         $employee = $this->model->find($id)
             ->delete();
 
-        return response()->json(null, 200);
+        return response()->json(null, Response::HTTP_OK);
     }
 }

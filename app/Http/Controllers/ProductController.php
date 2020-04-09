@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+
 
 class ProductController extends Controller
 {
@@ -18,7 +20,7 @@ class ProductController extends Controller
         $produto = $this->model->all();
 
         if (count($produto) == 0)
-            return response()->json(['message' => 'client list is empty'], 404);
+            return response()->json(['message' => 'Product list is empty'], Response::HTTP_BAD_REQUEST);
         return response()->json($produto);
     }
 
@@ -26,8 +28,8 @@ class ProductController extends Controller
         $produto = $this->model->find($id);
 
         if($produto == null)
-            return response()->json(["message" => "Falha ao adicionar usuário"], 404);
-        return response()->json($produto,200);
+            return response()->json(["message" => "Failed to add new product"], Response::HTTP_BAD_REQUEST);
+        return response()->json($produto, Response::HTTP_OK);
     }
 
     public function insert(Request $request){
@@ -40,16 +42,16 @@ class ProductController extends Controller
             "cpf" => $request["cpf"]
         ]);
 
-        return response()->json($produto, 200);
+        return response()->json($produto, Response::HTTP_OK);
 
     }
 
     public function update($id, Request $request){
         dd($id, $request ->all());
-        $produto = $this->models->find($id)
+        $produto = $this->model->find($id)
             ->update($request->all());
 
-        return response()->json($produto, 200);
+        return response()->json($produto,Response::HTTP_OK);
 
     }
 
@@ -57,6 +59,6 @@ class ProductController extends Controller
         $produto = $this->model->find($id)
             ->delete();
 
-        return response()->json(null, 200);
+        return response()->json(null, Response::HTTP_OK);
     }
 }

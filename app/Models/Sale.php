@@ -2,23 +2,23 @@
 
 
 namespace App\Models;
-use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Database\Eloquent\Model;
 
 class Sale extends Model
 {
-    protected $table = 'venda';
+    protected $table = 'sale';
     public $timestamps = false;
 
     protected $fillable = [
-        'idfuncionario',
+        'idemployee',
         'id_cliente',
-        'codigo_produto',
+        'codigo_product',
         'data'
     ];
 
-    /*protected $casts = [
+    protected $casts = [
       'data' => 'Timestamps'
-    ];*/
+    ];
 
 }
